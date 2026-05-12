@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -14,58 +14,88 @@ class ProductController extends Controller
         return view('products.index', compact('products'));
     }
 
+
+    //INSERT
     public function insert()
     {
-        // ambil kategori pertama agar tidak error
-        $category = Category::first();
-
-        if (!$category) {
-            return redirect('/products')->with('error', 'Kategori belum ada!');
-        }
-
         Product::create([
             'name' => 'Produk Baru',
+            'category_id' => 1,
             'price' => 10000,
-            'stock' => 10, 
-            'description' => 'Contoh deskripsi',
-            'status' => 'tersedia',
-            'category_id' => $category->id
+            'stock' => 10,
+            'description' => 'Produk otomatis',
+            'status' => 'tersedia'
         ]);
 
         return redirect('/products')->with('success', 'Data berhasil ditambahkan');
     }
 
-    public function update($id)
-    {
-        $product = Product::find($id);
+    // //UPDATE
+    // public function update($id)
+    // {
+    //     $product = Product::findOrFail($id);
 
-        if (!$product) {
-            return redirect('/products')->with('error', 'Data tidak ditemukan');
-        }
+    //     $product->update([
+    //         'name' => 'Produk Update',
+    //         'price' => 20000,
+    //         'stock' => 5,
+    //         'description' => 'Produk yang diupdate',
+    //         'status' => 'habis'
+    //     ]);
 
-        $category = Category::first();
+    //     return redirect('/products')->with('success', 'Data berhasil diupdate');
+    // }
 
-        $product->update([
-            'name' => 'Produk Update',
-            'price' => 20000,
-            'description' => 'Deskripsi diupdate',
-            'status' => 'habis',
-            'category_id' => $category ? $category->id : $product->category_id
-        ]);
+    public function update(Request $request, $id)
+{
+    $products = Product::findOrFail($id);
 
-        return redirect('/products')->with('success', 'Data berhasil diupdate');
-    }
+    $products->update([
+        'category_id' => $request->category_id,
+        'name' => $request->name,
+        'price' => $request->price,
+        'stock' => $request->stock,
+        'description' => $request->description,
+        'status' => $request->status
+    ]);
 
+    return redirect('/products')
+        ->with('success', 'Data berhasil diupdate');
+}
+
+    //DELETE
     public function delete($id)
     {
-        $product = Product::find($id);
-
-        if (!$product) {
-            return redirect('/products')->with('error', 'Data tidak ditemukan');
-        }
-
+        $product = Product::findOrFail($id);
         $product->delete();
 
         return redirect('/products')->with('success', 'Data berhasil dihapus');
+    }
+
+    public function create()
+    {
+        $categories = Category::all();
+        return view('products.create', compact('categories'));
+    }
+
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        $categories = Category::all();
+        return view('products.update', compact('product', 'categories'));
+    }
+
+    public function store(Request $request)
+    {
+        Product::create([
+            'name' => $request->name,
+            'category_id' => $request->category_id,
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'description' => $request->description,
+            'status' => $request->status,
+        ]);
+
+        return redirect('/products')->with('success', 'Data berhasil ditambahkan');
     }
 }
