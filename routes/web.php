@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,3 +17,10 @@ Route::post('/products', [ProductController::class, 'store'])->name('products.st
 Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
 Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
 Route::delete('/products/{id}', [ProductController::class, 'update'])->name('products.update');
+
+
+// Route::resource otomatis akan membuat 7 rute CRUD standar (index, 
+// create, 
+// store, show, edit, update, destroy) ke dalam aplikasi.
+Route::resource('categories', CategoryController::class);
+Route::resource('products', ProductController::class);
