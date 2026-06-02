@@ -15,9 +15,11 @@
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
         <div class="container">
 
-            <a class="navbar-brand fw-bold" href="/">
+            <a class="navbar-brand fw-bold"
+               href="/">
                 Inventory App
             </a>
 
@@ -25,7 +27,9 @@
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#navbarNav">
+
                 <span class="navbar-toggler-icon"></span>
+
             </button>
 
             <div class="collapse navbar-collapse"
@@ -54,24 +58,59 @@
                         </a>
                     </li>
 
+                    @auth
+
+                        <li class="nav-item">
+                            <span class="nav-link text-warning fw-bold">
+                                {{ Auth::user()->name }}
+                            </span>
+                        </li>
+
+                        <li class="nav-item ms-2">
+                            <a href="{{ route('logout') }}"
+                               class="btn btn-danger btn-sm">
+                                Logout
+                            </a>
+                        </li>
+
+                    @else
+
+                        <li class="nav-item ms-2">
+                            <a href="{{ route('login') }}"
+                               class="btn btn-success btn-sm">
+                                Login
+                            </a>
+                        </li>
+
+                    @endauth
+
                 </ul>
 
             </div>
+
         </div>
+
     </nav>
 
     <!-- CONTENT -->
     <main class="container my-5 flex-grow-1">
+
         @yield('content')
+
     </main>
 
     <!-- FOOTER -->
     <footer class="bg-dark text-white text-center py-3 mt-auto">
+
         <div class="container">
+
             <p class="mb-0">
-                © {{ date('Y') }} Inventory App - Manajemen Informasi PNP
+                © {{ date('Y') }}
+                Inventory App - Manajemen Informasi PNP
             </p>
+
         </div>
+
     </footer>
 
     <!-- Bootstrap JS -->
