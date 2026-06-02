@@ -24,3 +24,4 @@ Route::delete('/products/{id}', [ProductController::class, 'update'])->name('pro
 // store, show, edit, update, destroy) ke dalam aplikasi.
 Route::resource('categories', CategoryController::class);
 Route::resource('products', ProductController::class);
+Route::get('/', function () {return view('home');})->name('home');
